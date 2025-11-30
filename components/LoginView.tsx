@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { store } from '../services/store';
 import { User } from '../types';
-import { Lock, User as UserIcon, LogIn, AlertCircle, ArrowRight, Wallet, HeartHandshake } from 'lucide-react';
+import { Lock, User as UserIcon, LogIn, AlertCircle, ArrowRight, Wallet, HeartHandshake, ArrowLeft } from 'lucide-react';
 
 interface LoginViewProps {
     onLogin: (user: User) => void;
+    onBack?: () => void;
 }
 
-export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
+export const LoginView: React.FC<LoginViewProps> = ({ onLogin, onBack }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -35,6 +36,12 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
                     
                     {/* Top Brand Area */}
                     <div className="relative z-10 mb-8 md:mb-0">
+                         {onBack && (
+                            <button onClick={onBack} className="mb-6 flex items-center gap-2 text-blue-200 hover:text-white transition font-bold text-sm">
+                                <ArrowLeft size={16} /> Retour à l'accueil
+                            </button>
+                        )}
+
                         {settings.logoUrl && (
                              <img src={settings.logoUrl} alt="Logo" className="h-20 md:h-24 object-contain mb-8 bg-white/10 p-2 rounded-xl backdrop-blur-sm" />
                         )}

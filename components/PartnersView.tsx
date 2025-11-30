@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { store } from '../services/store';
 import { Partner, PartnerType } from '../types';
@@ -27,7 +28,7 @@ export const PartnersView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 h-full flex flex-col bg-slate-50">
+    <div className="p-6 h-full flex flex-col bg-slate-50 relative">
        <div className="flex justify-between items-center mb-8">
         <div>
             <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Partenaires Financiers</h2>
@@ -41,64 +42,68 @@ export const PartnersView: React.FC = () => {
         </button>
       </div>
 
+      {/* MODAL POPUP FOR ADDING */}
       {isAdding && (
-          <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-200 mb-8 animate-in fade-in slide-in-from-top-4 relative">
-              <button 
-                onClick={() => setIsAdding(false)} 
-                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
-              >
-                  <X size={24} />
-              </button>
-              <h3 className="font-extrabold text-xl mb-6 text-slate-900 flex items-center gap-2">
-                  <Building className="text-indigo-600" /> Nouveau Partenaire
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                      <label className="block text-sm font-extrabold text-slate-900 mb-2">Nom de l'organisation <span className="text-red-500">*</span></label>
-                      <input 
-                        className="w-full border-2 border-slate-200 bg-slate-50 rounded-xl p-3.5 font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none"
-                        placeholder="Ex: Banque Mondiale"
-                        value={newPartner.name || ''}
-                        onChange={e => setNewPartner({...newPartner, name: e.target.value})}
-                      />
-                  </div>
-                  <div>
-                      <label className="block text-sm font-extrabold text-slate-900 mb-2">Type de Partenaire</label>
-                      <select 
-                        className="w-full border-2 border-slate-200 bg-slate-50 rounded-xl p-3.5 font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none cursor-pointer"
-                        value={newPartner.type}
-                        onChange={e => setNewPartner({...newPartner, type: e.target.value as PartnerType})}
-                      >
-                          <option value="INTERNAL">Interne (Local)</option>
-                          <option value="EXTERNAL">Externe (International)</option>
-                      </select>
-                  </div>
-                  <div>
-                      <label className="block text-sm font-extrabold text-slate-900 mb-2">Pays / Région</label>
-                      <input 
-                        className="w-full border-2 border-slate-200 bg-slate-50 rounded-xl p-3.5 font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none"
-                        placeholder="Ex: RDC, Kinshasa"
-                        value={newPartner.country || ''}
-                        onChange={e => setNewPartner({...newPartner, country: e.target.value})}
-                      />
-                  </div>
-                  <div>
-                      <label className="block text-sm font-extrabold text-slate-900 mb-2">Email Contact</label>
-                      <input 
-                        className="w-full border-2 border-slate-200 bg-slate-50 rounded-xl p-3.5 font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none"
-                        placeholder="contact@partenaire.org"
-                        value={newPartner.email || ''}
-                        onChange={e => setNewPartner({...newPartner, email: e.target.value})}
-                      />
-                  </div>
-              </div>
-              <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-slate-100">
-                  <button onClick={() => setIsAdding(false)} className="px-6 py-3 text-slate-700 font-bold hover:bg-slate-100 rounded-xl transition">Annuler</button>
-                  <button onClick={handleSave} className="px-8 py-3 bg-indigo-700 text-white font-bold rounded-xl hover:bg-indigo-800 shadow-lg shadow-indigo-700/20">Enregistrer Partenaire</button>
-              </div>
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full animate-in zoom-in-95 duration-200">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="font-extrabold text-xl text-slate-900 flex items-center gap-2">
+                        <Building className="text-indigo-600" /> Nouveau Partenaire
+                    </h3>
+                    <button onClick={() => setIsAdding(false)} className="text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full p-2">
+                        <X size={24} />
+                    </button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label className="block text-sm font-extrabold text-slate-900 mb-2">Nom de l'organisation <span className="text-red-500">*</span></label>
+                        <input 
+                          className="w-full border-2 border-slate-200 bg-slate-50 rounded-xl p-3.5 font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none"
+                          placeholder="Ex: Banque Mondiale"
+                          value={newPartner.name || ''}
+                          onChange={e => setNewPartner({...newPartner, name: e.target.value})}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-extrabold text-slate-900 mb-2">Type de Partenaire</label>
+                        <select 
+                          className="w-full border-2 border-slate-200 bg-slate-50 rounded-xl p-3.5 font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none cursor-pointer"
+                          value={newPartner.type}
+                          onChange={e => setNewPartner({...newPartner, type: e.target.value as PartnerType})}
+                        >
+                            <option value="INTERNAL">Interne (Local)</option>
+                            <option value="EXTERNAL">Externe (International)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-extrabold text-slate-900 mb-2">Pays / Région</label>
+                        <input 
+                          className="w-full border-2 border-slate-200 bg-slate-50 rounded-xl p-3.5 font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none"
+                          placeholder="Ex: RDC, Kinshasa"
+                          value={newPartner.country || ''}
+                          onChange={e => setNewPartner({...newPartner, country: e.target.value})}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-extrabold text-slate-900 mb-2">Email Contact</label>
+                        <input 
+                          className="w-full border-2 border-slate-200 bg-slate-50 rounded-xl p-3.5 font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none"
+                          placeholder="contact@partenaire.org"
+                          value={newPartner.email || ''}
+                          onChange={e => setNewPartner({...newPartner, email: e.target.value})}
+                        />
+                    </div>
+                </div>
+                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-slate-100">
+                    <button onClick={() => setIsAdding(false)} className="px-6 py-3 text-slate-700 font-bold hover:bg-slate-100 rounded-xl transition">Annuler</button>
+                    <button onClick={handleSave} className="px-8 py-3 bg-indigo-700 text-white font-bold rounded-xl hover:bg-indigo-800 shadow-lg shadow-indigo-700/20">Enregistrer Partenaire</button>
+                </div>
+            </div>
           </div>
       )}
 
+      {/* PARTNER LIST */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-auto">
           {partners.map(partner => (
               <div key={partner.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">

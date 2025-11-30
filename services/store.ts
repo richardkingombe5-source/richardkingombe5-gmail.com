@@ -38,6 +38,20 @@ class StoreService {
     localStorage.setItem(key, JSON.stringify(data));
   }
 
+  // --- Session Management ---
+  saveSession(user: User) {
+      localStorage.setItem('mfi_session', JSON.stringify(user));
+  }
+
+  getSession(): User | null {
+      const stored = localStorage.getItem('mfi_session');
+      return stored ? JSON.parse(stored) : null;
+  }
+
+  clearSession() {
+      localStorage.removeItem('mfi_session');
+  }
+
   // --- Users & Auth ---
   getUsers(): User[] {
       const users = this.load<User[]>('mfi_users', []);
@@ -132,7 +146,7 @@ class StoreService {
     
     // Calculate currently used capital
     const activeLoans = loans.filter(l => l.status === 'ACTIVE' || l.status === 'OVERDUE');
-    const usedCDF = activeLoans.filter(l => l.currency === 'CDF').reduce((acc, l) => acc + l.remainingBalance, 0); // Simplified approximation
+    const usedCDF = activeLoans.filter(l => l.currency === 'CDF').reduce((acc, l) => acc + l.remainingBalance, 0); 
     const usedUSD = activeLoans.filter(l => l.currency === 'USD').reduce((acc, l) => acc + l.remainingBalance, 0);
 
     // Simple capital check

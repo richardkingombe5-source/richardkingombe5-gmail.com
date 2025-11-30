@@ -42,7 +42,7 @@ export const UsersView: React.FC = () => {
     };
 
     return (
-        <div className="p-6 h-full flex flex-col bg-slate-50">
+        <div className="p-6 h-full flex flex-col bg-slate-50 relative">
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Gestion de l'Équipe</h2>
@@ -56,77 +56,85 @@ export const UsersView: React.FC = () => {
                 </button>
             </div>
 
+            {/* MODAL POPUP */}
             {isEditing && (
-                <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-200 mb-8 max-w-2xl animate-in slide-in-from-top-4">
-                    <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
-                        {currentUser.id ? <Edit2 className="text-blue-600" /> : <UserPlus className="text-green-600" />}
-                        {currentUser.id ? 'Modifier le Compte' : 'Créer un Nouveau Compte'}
-                    </h3>
-
-                    <div className="space-y-5">
-                        <div>
-                            <label className="block text-sm font-extrabold text-slate-900 mb-2">Nom Complet</label>
-                            <input 
-                                className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600"
-                                value={currentUser.name || ''}
-                                onChange={e => setCurrentUser({...currentUser, name: e.target.value})}
-                                placeholder="Ex: Jean Dupont"
-                            />
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-200 mb-8 max-w-2xl w-full animate-in zoom-in-95">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
+                                {currentUser.id ? <Edit2 className="text-blue-600" /> : <UserPlus className="text-green-600" />}
+                                {currentUser.id ? 'Modifier le Compte' : 'Créer un Nouveau Compte'}
+                            </h3>
+                            <button onClick={() => setIsEditing(false)} className="text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full p-2">
+                                <X size={24} />
+                            </button>
                         </div>
-                        <div className="grid grid-cols-2 gap-5">
+
+                        <div className="space-y-5">
                             <div>
-                                <label className="block text-sm font-extrabold text-slate-900 mb-2">Nom d'utilisateur</label>
+                                <label className="block text-sm font-extrabold text-slate-900 mb-2">Nom Complet</label>
                                 <input 
                                     className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600"
-                                    value={currentUser.username || ''}
-                                    onChange={e => setCurrentUser({...currentUser, username: e.target.value})}
-                                    placeholder="login"
+                                    value={currentUser.name || ''}
+                                    onChange={e => setCurrentUser({...currentUser, name: e.target.value})}
+                                    placeholder="Ex: Jean Dupont"
                                 />
                             </div>
-                            <div>
-                                <label className="block text-sm font-extrabold text-slate-900 mb-2">Mot de passe</label>
-                                <input 
-                                    className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600"
-                                    value={currentUser.password || ''}
-                                    onChange={e => setCurrentUser({...currentUser, password: e.target.value})}
-                                    placeholder="******"
-                                />
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block text-sm font-extrabold text-slate-900 mb-2">Nom d'utilisateur</label>
+                                    <input 
+                                        className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600"
+                                        value={currentUser.username || ''}
+                                        onChange={e => setCurrentUser({...currentUser, username: e.target.value})}
+                                        placeholder="login"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-extrabold text-slate-900 mb-2">Mot de passe</label>
+                                    <input 
+                                        className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600"
+                                        value={currentUser.password || ''}
+                                        onChange={e => setCurrentUser({...currentUser, password: e.target.value})}
+                                        placeholder="******"
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-5">
+                                <div>
+                                    <label className="block text-sm font-extrabold text-slate-900 mb-2">Rôle</label>
+                                    <select 
+                                        className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600 cursor-pointer"
+                                        value={currentUser.role}
+                                        onChange={e => setCurrentUser({...currentUser, role: e.target.value as UserRole})}
+                                    >
+                                        <option value="AGENT">Agent (Limité)</option>
+                                        <option value="ADMIN">Administrateur (Total)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-extrabold text-slate-900 mb-2">Statut</label>
+                                    <select 
+                                        className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600 cursor-pointer"
+                                        value={currentUser.isActive ? 'true' : 'false'}
+                                        onChange={e => setCurrentUser({...currentUser, isActive: e.target.value === 'true'})}
+                                    >
+                                        <option value="true">Actif</option>
+                                        <option value="false">Désactivé</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-5">
-                            <div>
-                                <label className="block text-sm font-extrabold text-slate-900 mb-2">Rôle</label>
-                                <select 
-                                    className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600 cursor-pointer"
-                                    value={currentUser.role}
-                                    onChange={e => setCurrentUser({...currentUser, role: e.target.value as UserRole})}
-                                >
-                                    <option value="AGENT">Agent (Limité)</option>
-                                    <option value="ADMIN">Administrateur (Total)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-extrabold text-slate-900 mb-2">Statut</label>
-                                <select 
-                                    className="w-full border-2 border-slate-200 rounded-xl p-3.5 font-bold text-slate-800 outline-none focus:border-indigo-600 cursor-pointer"
-                                    value={currentUser.isActive ? 'true' : 'false'}
-                                    onChange={e => setCurrentUser({...currentUser, isActive: e.target.value === 'true'})}
-                                >
-                                    <option value="true">Actif</option>
-                                    <option value="false">Désactivé</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-slate-100">
-                        <button onClick={() => setIsEditing(false)} className="px-6 py-3 font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition">Annuler</button>
-                        <button onClick={handleSave} className="px-8 py-3 bg-indigo-700 text-white font-bold rounded-xl hover:bg-indigo-800 shadow-lg">Enregistrer</button>
+                        <div className="flex justify-end gap-3 mt-8 pt-6 border-t border-slate-100">
+                            <button onClick={() => setIsEditing(false)} className="px-6 py-3 font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition">Annuler</button>
+                            <button onClick={handleSave} className="px-8 py-3 bg-indigo-700 text-white font-bold rounded-xl hover:bg-indigo-800 shadow-lg">Enregistrer</button>
+                        </div>
                     </div>
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-auto">
                 {users.map(user => (
                     <div key={user.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-start justify-between group hover:shadow-md transition">
                         <div className="flex items-center gap-4">
